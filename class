@@ -1,0 +1,132 @@
+class Superhero:
+    """Base class representing a superhero"""
+    
+    def __init__(self, name, secret_identity, powers, base_of_operations):
+        # Encapsulated attributes (protected with _ prefix)
+        self._name = name
+        self._secret_identity = secret_identity
+        self._powers = powers
+        self._base = base_of_operations
+        self._energy_level = 100  # Private attribute
+        
+    # Public methods to access private attributes (getters)
+    def get_name(self):
+        return self._name
+        
+    def get_secret_identity(self):
+        return f"CLASSIFIED: {self._secret_identity[:1]}***"
+        
+    def use_power(self, power_index):
+        """Polymorphic method to be overridden by subclasses"""
+        if power_index < len(self._powers):
+            print(f"{self._name} uses {self._powers[power_index]}!")
+            self._energy_level -= 10
+        else:
+            print("Power not available!")
+        return self._energy_level
+        
+    def rest(self):
+        """Recover energy"""
+        self._energy_level = min(100, self._energy_level + 30)
+        print(f"{self._name} rests. Energy: {self._energy_level}%")
+        return self._energy_level
+        
+    def __str__(self):
+        return (f"Superhero: {self._name}\n"
+                f"Powers: {', '.join(self._powers)}\n"
+                f"Base: {self._base}")
+
+
+class TechHero(Superhero):
+    """Subclass for tech-based heroes"""
+    
+    def __init__(self, name, secret_identity, powers, base, gadgets):
+        super().__init__(name, secret_identity, powers, base)
+        self._gadgets = gadgets  # New attribute specific to TechHero
+        
+    def use_gadget(self, gadget_name):
+        """Extended functionality for tech heroes"""
+        if gadget_name in self._gadgets:
+            print(f"{self._name} deploys {gadget_name}!")
+            return True
+        print("Gadget not available!")
+        return False
+        
+    # Method overriding
+    def use_power(self, power_index):
+        """Modified version with tech enhancements"""
+        if power_index < len(self._powers):
+            print(f"{self._name} activates {self._powers[power_index]} with tech boost!")
+            self._energy_level -= 5  # Tech heroes use less energy
+        else:
+            print("Power not available!")
+        return self._energy_level
+
+
+class MagicHero(Superhero):
+    """Subclass for magic-based heroes"""
+    
+    def __init__(self, name, secret_identity, powers, base, mana_level):
+        super().__init__(name, secret_identity, powers, base)
+        self._mana = mana_level  # New attribute
+        
+    # Method overriding
+    def use_power(self, power_index):
+        """Modified version with magic rules"""
+        if power_index < len(self._powers):
+            if self._mana >= 15:
+                print(f"{self._name} casts {self._powers[power_index]}!")
+                self._mana -= 15
+            else:
+                print("Not enough mana!")
+        else:
+            print("Power not available!")
+        return self._mana
+        
+    def meditate(self):
+        """Magic-specific recovery"""
+        self._mana = min(100, self._mana + 25)
+        print(f"{self._name} meditates. Mana: {self._mana}%")
+        return self._mana
+
+
+# Demonstration
+if __name__ == "__main__":
+    print("=== Superhero System ===")
+    
+    # Create instances
+    basic_hero = Superhero(
+        "Captain Justice",
+        "John Smith",
+        ["Super strength", "Flight"],
+        "Justice Tower"
+    )
+    
+    tech_hero = TechHero(
+        "Iron Sentinel",
+        "Tony Starkowski",
+        ["Repulsor beams", "Rocket boots"],
+        "Stark Tower",
+        ["AI Assistant", "Nanobot Armor"]
+    )
+    
+    magic_hero = MagicHero(
+        "Doctor Mystic",
+        "Stephen Stranger",
+        ["Reality Warp", "Time Manipulation"],
+        "Sanctum Sanctorum",
+        80
+    )
+    
+    # Demonstrate polymorphism
+    heroes = [basic_hero, tech_hero, magic_hero]
+    
+    for hero in heroes:
+        print("\n" + "="*40)
+        print(hero)  # Calls __str__ method
+        print("- Power usage:")
+        hero.use_power(0)  # Same method, different behavior
+        if isinstance(hero, TechHero):
+            hero.use_gadget("AI Assistant")
+        elif isinstance(hero, MagicHero):
+            hero.meditate()
