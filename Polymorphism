@@ -1,0 +1,43 @@
+class Vehicle:
+    def __init__(self, name):
+        self.name = name
+    
+    def move(self):
+        raise NotImplementedError("Subclasses must implement this method")
+
+class Car(Vehicle):
+    def move(self):
+        return f"{self.name} 🚗 drives on the road (Vroom vroom!)"
+
+class Boat(Vehicle):
+    def move(self):
+        return f"{self.name} 🚤 sails on water (Splish splash!)"
+
+class Airplane(Vehicle):
+    def move(self):
+        return f"{self.name} ✈️ flies through the clouds (Whoosh!)"
+
+class Bicycle(Vehicle):
+    def move(self):
+        return f"{self.name} 🚲 pedals on bike paths (Ring ring!)"
+
+class Rocket(Vehicle):
+    def move(self):
+        return f"{self.name} 🚀 blasts into space (3...2...1... Liftoff!)"
+
+def vehicle_movement(vehicles):
+    print("\n=== How Vehicles Move ===")
+    for vehicle in vehicles:
+        print(vehicle.move())
+
+# Create some vehicles
+vehicles = [
+    Car("Tesla"),
+    Boat("Titanic"),
+    Airplane("Boeing 747"),
+    Bicycle("Mountain Bike"),
+    Rocket("Falcon 9")
+]
+
+# Demonstrate polymorphism
+vehicle_movement(vehicles)
